@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 // A single character tile in the roster grid, showing the summary data from
 // the deep sync (image, item level, achievement/quest counts).
 export default function CharacterCard({ character }) {
@@ -11,7 +13,7 @@ export default function CharacterCard({ character }) {
   const unavailable = character.profileAvailable === false;
 
   return (
-    <article className={`character-card ${factionClass}`}>
+    <Link to={`/characters/${character.id}`} className={`character-card ${factionClass}`}>
       <div className="character-avatar" aria-hidden="true">
         {character.renderImageUrl ? (
           <img src={character.renderImageUrl} alt="" loading="lazy" />
@@ -40,6 +42,6 @@ export default function CharacterCard({ character }) {
           </div>
         )}
       </div>
-    </article>
+    </Link>
   );
 }

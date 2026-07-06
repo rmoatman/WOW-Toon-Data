@@ -55,6 +55,8 @@ export const blizzardApi = {
 export const charactersApi = {
   list: () => api.get('/api/characters'),
   get: (id) => api.get(`/api/characters/${id}`),
+  achievements: (id) => api.get(`/api/characters/${id}/achievements`),
+  quests: (id) => api.get(`/api/characters/${id}/quests`),
   syncOne: (id) => api.post(`/api/characters/${id}/sync`),
 };
 
