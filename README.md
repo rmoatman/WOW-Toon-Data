@@ -59,7 +59,7 @@ See `server/.env.example` and `client/.env.example` for the full list. The Blizz
 
 - [x] **M1 — Scaffold:** monorepo, Vite client, Express API, Mongo connection, health check, Render config.
 - [x] **M2 — Auth:** register/login/JWT, forgot-password, delete-account, footer + static pages, seeded demo account.
-- [ ] **M3 — Battle.net OAuth linking** + roster import.
+- [x] **M3 — Battle.net OAuth linking** + roster import (connect/callback/resync/unlink, encrypted token, character roster).
 - [ ] **M4 — Sync engine + data model** (per-character fetch, metadata cache, staleness).
 - [ ] **M5 — Character menu + detail page.**
 - [ ] **M6 — Combined achievement & quest lists** (sortable/searchable + reverse lookup).

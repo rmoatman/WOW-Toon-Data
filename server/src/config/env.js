@@ -1,6 +1,11 @@
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
-dotenv.config();
+// Load server/.env regardless of the process's current working directory
+// (this file lives at server/src/config/env.js, so go up three levels).
+const serverRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+dotenv.config({ path: path.join(serverRoot, '.env') });
 
 const env = {
   nodeEnv: process.env.NODE_ENV || 'development',

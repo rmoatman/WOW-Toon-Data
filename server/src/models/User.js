@@ -32,8 +32,12 @@ const userSchema = new mongoose.Schema(
     // ---- Battle.net linkage (populated in M3) ----
     battletag: { type: String, default: null },
     blizzardRegion: { type: String, default: 'us' },
-    // Encrypted refresh token (never returned to the client).
-    blizzardRefreshToken: { type: String, select: false, default: null },
+    blizzardUserId: { type: String, default: null },
+    // Blizzard issues no refresh token; the user access token lasts ~24h. We
+    // store it encrypted so roster re-syncs work until it expires, then the
+    // user reconnects. Never returned to the client.
+    blizzardAccessToken: { type: String, select: false, default: null },
+    blizzardTokenExpires: { type: Date, select: false, default: null },
   },
   { timestamps: true }
 );
@@ -47,7 +51,7 @@ userSchema.methods.toPublicJSON = function toPublicJSON() {
     isDemo: this.isDemo,
     battletag: this.battletag,
     blizzardRegion: this.blizzardRegion,
-    battlenetLinked: Boolean(this.blizzardRefreshToken),
+    battlenetLinked: Boolean(this.battletag),
     createdAt: this.createdAt,
   };
 };

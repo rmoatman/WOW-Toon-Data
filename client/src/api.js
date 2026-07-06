@@ -44,3 +44,15 @@ export const authApi = {
   resetPassword: (token, password) => api.post('/api/auth/reset-password', { token, password }),
   deleteAccount: () => api.del('/api/auth/account'),
 };
+
+export const blizzardApi = {
+  status: () => api.get('/api/blizzard/status'),
+  authorize: () => api.get('/api/blizzard/authorize'),
+  resync: () => api.post('/api/blizzard/resync'),
+  unlink: () => api.post('/api/blizzard/unlink'),
+};
+
+export const charactersApi = {
+  list: () => api.get('/api/characters'),
+  get: (id) => api.get(`/api/characters/${id}`),
+};

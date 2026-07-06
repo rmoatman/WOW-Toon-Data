@@ -378,3 +378,86 @@ a:hover {
 .roadmap-list li {
   margin: 0.4rem 0;
 }
+
+/* ---- Battle.net connect / roster ---- */
+.connect-card h2 {
+  margin-top: 0;
+}
+.connect-card .btn-primary {
+  margin-top: 0.5rem;
+}
+.linked-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.linked-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.linked-actions .btn-secondary,
+.linked-actions .btn-danger {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.roster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.character-card {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-left: 3px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.character-card.faction-horde {
+  border-left-color: #c0392b;
+}
+.character-card.faction-alliance {
+  border-left-color: #2f6fb0;
+}
+.character-avatar {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.character-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-fallback {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.character-body {
+  min-width: 0;
+}
+.character-name {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.character-meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+.character-sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+}

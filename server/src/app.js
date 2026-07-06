@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import env, { isProd } from './config/env.js';
 import healthRouter from './routes/health.js';
 import authRouter from './routes/auth.js';
+import blizzardRouter from './routes/blizzard.js';
+import charactersRouter from './routes/characters.js';
 
 export function createApp() {
   const app = express();
@@ -29,6 +31,8 @@ export function createApp() {
   // Routes
   app.use('/api/health', healthRouter);
   app.use('/api/auth', authRouter);
+  app.use('/api/blizzard', blizzardRouter);
+  app.use('/api/characters', charactersRouter);
 
   // API 404
   app.use('/api', (req, res) => {
