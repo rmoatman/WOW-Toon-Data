@@ -66,6 +66,31 @@ export default function DataTable({
     return sort.dir === 'asc' ? ' ▲' : ' ▼';
   };
 
+  const renderPager = (pos) =>
+    pageCount > 1 ? (
+      <div className={`datatable-pager ${pos}`}>
+        <button
+          type="button"
+          className="btn-secondary"
+          onClick={() => setPage((p) => Math.max(0, p - 1))}
+          disabled={clampedPage === 0}
+        >
+          Prev
+        </button>
+        <span className="muted">
+          Page {clampedPage + 1} of {pageCount}
+        </span>
+        <button
+          type="button"
+          className="btn-secondary"
+          onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+          disabled={clampedPage >= pageCount - 1}
+        >
+          Next
+        </button>
+      </div>
+    ) : null;
+
   return (
     <div className="datatable">
       <div className="datatable-toolbar">
@@ -85,6 +110,7 @@ export default function DataTable({
         <p className="muted datatable-empty">{query ? 'No matches.' : emptyText}</p>
       ) : (
         <>
+          {renderPager('top')}
           <div className="datatable-scroll">
             <table className="table">
               <thead>
@@ -92,7 +118,9 @@ export default function DataTable({
                   {columns.map((col) => (
                     <th
                       key={col.key}
-                      className={col.sortable ? 'sortable' : ''}
+                      className={[col.className, col.sortable ? 'sortable' : '']
+                        .filter(Boolean)
+                        .join(' ')}
                       onClick={col.sortable ? () => toggleSort(col.key) : undefined}
                       aria-sort={
                         sort?.key === col.key ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'
@@ -122,29 +150,7 @@ export default function DataTable({
             </table>
           </div>
 
-          {pageCount > 1 && (
-            <div className="datatable-pager">
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={clampedPage === 0}
-              >
-                Prev
-              </button>
-              <span className="muted">
-                Page {clampedPage + 1} of {pageCount}
-              </span>
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
-                disabled={clampedPage >= pageCount - 1}
-              >
-                Next
-              </button>
-            </div>
-          )}
+          {renderPager('bottom')}
         </>
       )}
     </div>

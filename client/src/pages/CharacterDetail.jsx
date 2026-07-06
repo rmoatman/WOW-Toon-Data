@@ -6,12 +6,11 @@ import { formatDate } from '../util/format.js';
 
 const ACH_COLUMNS = [
   { key: 'name', label: 'Achievement', sortable: true },
-  { key: 'points', label: 'Points', sortable: true, className: 'col-num', render: (v) => v ?? '—' },
   {
     key: 'completedAt',
     label: 'Completed',
     sortable: true,
-    className: 'col-num',
+    className: 'col-center',
     render: (v) => formatDate(v),
   },
 ];
