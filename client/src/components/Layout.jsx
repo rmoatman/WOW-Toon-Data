@@ -15,7 +15,7 @@ export default function Layout() {
     <div className="app-shell">
       <header className="site-header">
         <Link to="/" className="brand">
-          WOW-<span>Toon</span>-Data
+          My Toons
         </Link>
         <nav className="site-nav" aria-label="Primary">
           {user ? (

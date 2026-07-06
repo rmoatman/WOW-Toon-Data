@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'LifeCraft';
+  src: url('/fonts/LifeCraft_Font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #14161f;
   --bg-elevated: #1b1e2b;
@@ -54,16 +62,16 @@ a:hover {
 }
 
 .brand {
-  font-weight: 700;
-  font-size: 1.2rem;
-  letter-spacing: 0.02em;
-  color: var(--text);
+  font-family: 'LifeCraft', system-ui, sans-serif;
+  font-weight: normal;
+  font-size: 1.7rem;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  line-height: 1;
 }
 .brand:hover {
   text-decoration: none;
-}
-.brand span {
-  color: var(--accent);
+  color: var(--accent-hover);
 }
 
 .site-nav {
