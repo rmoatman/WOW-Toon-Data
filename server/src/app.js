@@ -9,6 +9,8 @@ import healthRouter from './routes/health.js';
 import authRouter from './routes/auth.js';
 import blizzardRouter from './routes/blizzard.js';
 import charactersRouter from './routes/characters.js';
+import achievementsRouter from './routes/achievements.js';
+import questsRouter from './routes/quests.js';
 import syncRouter from './routes/sync.js';
 
 export function createApp() {
@@ -34,6 +36,8 @@ export function createApp() {
   app.use('/api/auth', authRouter);
   app.use('/api/blizzard', blizzardRouter);
   app.use('/api/characters', charactersRouter);
+  app.use('/api/achievements', achievementsRouter);
+  app.use('/api/quests', questsRouter);
   app.use('/api/sync', syncRouter);
 
   // API 404

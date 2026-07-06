@@ -692,3 +692,101 @@ a:hover {
   padding: 0.4rem 0.9rem;
   font-size: 0.9rem;
 }
+
+/* ---- Modal ---- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 100;
+}
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem 0.5rem;
+}
+.modal-head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.modal-close:hover {
+  color: var(--text);
+}
+.modal-body {
+  padding: 0 1.25rem 1.25rem;
+  overflow-y: auto;
+}
+.modal-sub {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+}
+
+/* ---- Reverse-lookup hit list ---- */
+.hit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.hit-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--panel-border);
+  flex-wrap: wrap;
+}
+.hit-item:last-child {
+  border-bottom: none;
+}
+.faction-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: 0 0 auto;
+}
+.faction-dot.dot-horde {
+  background: #c0392b;
+}
+.faction-dot.dot-alliance {
+  background: #2f6fb0;
+}
+.hit-name {
+  font-weight: 600;
+}
+.hit-meta {
+  font-size: 0.82rem;
+}
+.hit-date {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}

@@ -16,10 +16,7 @@ const ACH_COLUMNS = [
   },
 ];
 
-const QUEST_COLUMNS = [
-  { key: 'name', label: 'Quest', sortable: true },
-  { key: 'questId', label: 'ID', sortable: true, className: 'col-num' },
-];
+const QUEST_COLUMNS = [{ key: 'name', label: 'Quest', sortable: true }];
 
 export default function CharacterDetail() {
   const { id } = useParams();

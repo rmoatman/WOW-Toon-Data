@@ -62,6 +62,6 @@ See `server/.env.example` and `client/.env.example` for the full list. The Blizz
 - [x] **M3 — Battle.net OAuth linking** + roster import (connect/callback/resync/unlink, encrypted token, character roster).
 - [x] **M4 — Sync engine + data model** (per-character deep sync: achievements/quests/media/item level, shared metadata caches, staleness + auto-sync, 404 handling).
 - [x] **M5 — Character menu + detail page** (Deliverable #1: render image, stats, and searchable/sortable achievements & quests per character).
-- [ ] **M6 — Combined achievement & quest lists** (sortable/searchable + reverse lookup).
+- [x] **M6 — Combined achievement & quest lists** (Deliverables #2 & #3: account-wide sortable/searchable lists + reverse lookup of which characters have each).
 - [ ] **M7 — PWA** (manifest, service worker, install page).
 - [ ] **M8 — Demo/seeded account + polish.**

@@ -8,6 +8,8 @@ import ForgotPassword from './pages/ForgotPassword.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import CharacterDetail from './pages/CharacterDetail.jsx';
+import Achievements from './pages/Achievements.jsx';
+import Quests from './pages/Quests.jsx';
 import Account from './pages/Account.jsx';
 import About from './pages/About.jsx';
 import Privacy from './pages/Privacy.jsx';
@@ -40,6 +42,22 @@ export default function App() {
           element={
             <ProtectedRoute>
               <CharacterDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="achievements"
+          element={
+            <ProtectedRoute>
+              <Achievements />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="quests"
+          element={
+            <ProtectedRoute>
+              <Quests />
             </ProtectedRoute>
           }
         />

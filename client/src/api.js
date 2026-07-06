@@ -63,3 +63,13 @@ export const charactersApi = {
 export const syncApi = {
   all: (force = false) => api.post('/api/sync', { force }),
 };
+
+export const achievementsApi = {
+  list: () => api.get('/api/achievements'),
+  characters: (achievementId) => api.get(`/api/achievements/${achievementId}/characters`),
+};
+
+export const questsApi = {
+  list: () => api.get('/api/quests'),
+  characters: (questId) => api.get(`/api/quests/${questId}/characters`),
+};
