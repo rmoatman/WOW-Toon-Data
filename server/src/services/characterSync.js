@@ -89,7 +89,8 @@ export async function deepSyncCharacter(character) {
   if (mediaR.status === 'fulfilled') {
     const m = mediaR.value;
     update.renderImageUrl = pickMediaAsset(m, 'avatar');
-    update.mainImageUrl = pickMediaAsset(m, 'main-raw') || pickMediaAsset(m, 'inset');
+    update.insetImageUrl = pickMediaAsset(m, 'inset');
+    update.mainImageUrl = pickMediaAsset(m, 'main-raw');
   }
 
   let achCount = character.achievementCount;
@@ -116,7 +117,11 @@ export async function deepSyncCharacter(character) {
         completedAt: d.completedAt,
       })
     );
-    update.achievementCount = achCount;
+    // Count distinct NAMES so Blizzard's same-named variants aren't double-counted.
+    update.achievementCount = new Set(
+      completed.map((a) => (a.name ? a.name.toLowerCase() : `#${a.id}`))
+    ).size;
+    achCount = update.achievementCount;
   }
 
   let questCount = character.questCount;
@@ -133,7 +138,8 @@ export async function deepSyncCharacter(character) {
       quests,
       (d) => ({ userId: character.userId, characterId: character._id, questId: d.id })
     );
-    update.questCount = questCount;
+    update.questCount = new Set(quests.map((q) => (q.name ? q.name.toLowerCase() : `#${q.id}`))).size;
+    questCount = update.questCount;
   }
 
   await Character.updateOne({ _id: character._id }, { $set: update });

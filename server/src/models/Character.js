@@ -23,7 +23,8 @@ const characterSchema = new mongoose.Schema(
 
     // Populated by the deep per-character sync (M4).
     renderImageUrl: { type: String, default: '' }, // avatar (card thumbnail)
-    mainImageUrl: { type: String, default: '' }, // main-raw / inset (detail page)
+    insetImageUrl: { type: String, default: '' }, // inset (framed profile shot)
+    mainImageUrl: { type: String, default: '' }, // main-raw (full-body render)
     itemLevel: { type: Number, default: null }, // equipped_item_level
     guildName: { type: String, default: '' },
     titleName: { type: String, default: '' },
@@ -59,6 +60,7 @@ characterSchema.methods.toJSON = function toJSON() {
     faction: this.faction,
     gender: this.gender,
     renderImageUrl: this.renderImageUrl,
+    insetImageUrl: this.insetImageUrl,
     mainImageUrl: this.mainImageUrl,
     itemLevel: this.itemLevel,
     guildName: this.guildName,

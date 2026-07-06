@@ -51,16 +51,21 @@ export async function getCharacterAchievements(req, res, next) {
         },
       },
       { $unwind: { path: '$meta', preserveNullAndEmptyArrays: true } },
+      { $addFields: { _name: { $ifNull: ['$meta.name', ''] } } },
+      // Collapse Blizzard's same-named variants (e.g. Raid vs Remix) into one
+      // row; keep the earliest completion date.
       {
-        $project: {
-          _id: 0,
-          achievementId: 1,
-          completedAt: 1,
-          name: { $ifNull: ['$meta.name', ''] },
-          points: '$meta.points',
-          category: '$meta.category',
+        $group: {
+          _id: {
+            $cond: [{ $gt: ['$_name', ''] }, '$_name', { $concat: ['#', { $toString: '$achievementId' }] }],
+          },
+          achievementId: { $first: '$achievementId' },
+          name: { $first: '$_name' },
+          points: { $first: '$meta.points' },
+          completedAt: { $min: '$completedAt' },
         },
       },
+      { $project: { _id: 0, achievementId: 1, name: 1, points: 1, completedAt: 1 } },
       { $sort: { name: 1 } },
     ]);
 
@@ -87,14 +92,18 @@ export async function getCharacterQuests(req, res, next) {
         },
       },
       { $unwind: { path: '$meta', preserveNullAndEmptyArrays: true } },
+      { $addFields: { _name: { $ifNull: ['$meta.name', ''] } } },
+      // Collapse same-named quest variants into one row.
       {
-        $project: {
-          _id: 0,
-          questId: 1,
-          name: { $ifNull: ['$meta.name', ''] },
-          category: '$meta.category',
+        $group: {
+          _id: {
+            $cond: [{ $gt: ['$_name', ''] }, '$_name', { $concat: ['#', { $toString: '$questId' }] }],
+          },
+          questId: { $first: '$questId' },
+          name: { $first: '$_name' },
         },
       },
+      { $project: { _id: 0, questId: 1, name: 1 } },
       { $sort: { name: 1 } },
     ]);
 

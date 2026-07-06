@@ -72,7 +72,9 @@ export default function CharacterDetail() {
   if (!character) return null;
 
   const c = character;
-  const image = c.mainImageUrl || c.renderImageUrl;
+  // main-raw is high-res (1600x1200); in a portrait box it shows the full
+  // character height crisply. Fall back to the framed inset, then the avatar.
+  const image = c.mainImageUrl || c.insetImageUrl || c.renderImageUrl;
 
   return (
     <div className="page">
@@ -80,10 +82,12 @@ export default function CharacterDetail() {
         ← Characters
       </Link>
 
-      <section className={`character-hero card ${c.faction?.toLowerCase() === 'horde' ? 'faction-horde' : c.faction?.toLowerCase() === 'alliance' ? 'faction-alliance' : ''}`}>
+      <div className="detail-top">
         <div className="hero-portrait">
           {image ? <img src={image} alt={c.name} /> : <span className="avatar-fallback">{c.name.charAt(0)}</span>}
         </div>
+
+        <section className={`character-hero card ${c.faction?.toLowerCase() === 'horde' ? 'faction-horde' : c.faction?.toLowerCase() === 'alliance' ? 'faction-alliance' : ''}`}>
         <div className="hero-info">
           <h1>{c.name}</h1>
           {c.titleName && <p className="hero-title muted">{c.titleName}</p>}
@@ -131,7 +135,8 @@ export default function CharacterDetail() {
             <span className="muted last-sync">Synced {formatDate(c.lastDeepSyncedAt)}</span>
           )}
         </div>
-      </section>
+        </section>
+      </div>
 
       {error && <p className="form-error">{error}</p>}
 

@@ -4,32 +4,37 @@ import CharacterQuest from '../models/CharacterQuest.js';
 import AchievementMeta from '../models/AchievementMeta.js';
 import QuestMeta from '../models/QuestMeta.js';
 
+// Blizzard reuses the same display name across different achievement/quest IDs
+// (e.g. Raid vs Remix variants). We group by name so each shows once, and
+// count DISTINCT characters (a character that has two same-named IDs counts once).
+
 // GET /api/achievements  (requireAuth)
-// Every achievement earned by any of the user's characters, with how many of
-// them have it. Powers the combined, sortable/searchable achievement list.
 export async function getAllAchievements(req, res, next) {
   try {
     const achievements = await CharacterAchievement.aggregate([
       { $match: { userId: req.user._id } },
-      { $group: { _id: '$achievementId', characterCount: { $sum: 1 } } },
       {
         $lookup: {
           from: AchievementMeta.collection.name,
-          localField: '_id',
+          localField: 'achievementId',
           foreignField: 'achievementId',
           as: 'meta',
         },
       },
       { $unwind: { path: '$meta', preserveNullAndEmptyArrays: true } },
+      { $addFields: { _name: { $ifNull: ['$meta.name', ''] } } },
       {
-        $project: {
-          _id: 0,
-          achievementId: '$_id',
-          name: { $ifNull: ['$meta.name', ''] },
-          points: '$meta.points',
-          characterCount: 1,
+        $group: {
+          _id: {
+            $cond: [{ $gt: ['$_name', ''] }, '$_name', { $concat: ['#', { $toString: '$achievementId' }] }],
+          },
+          name: { $first: '$_name' },
+          achievementId: { $first: '$achievementId' },
+          points: { $first: '$meta.points' },
+          chars: { $addToSet: '$characterId' },
         },
       },
+      { $project: { _id: 0, name: 1, achievementId: 1, points: 1, characterCount: { $size: '$chars' } } },
       { $sort: { name: 1 } },
     ]);
     res.json({ achievements });
@@ -39,17 +44,23 @@ export async function getAllAchievements(req, res, next) {
 }
 
 // GET /api/achievements/:achievementId/characters  (requireAuth)
-// Which of the user's characters have earned a given achievement.
 export async function getAchievementCharacters(req, res, next) {
   try {
     const achievementId = Number(req.params.achievementId);
     const meta = await AchievementMeta.findOne({ achievementId }).lean();
+    const name = meta?.name || '';
+    // Resolve every sibling id that shares this name.
+    const ids = name
+      ? (await AchievementMeta.find({ name }).select('achievementId').lean()).map((m) => m.achievementId)
+      : [achievementId];
+
     const characters = await CharacterAchievement.aggregate([
-      { $match: { userId: req.user._id, achievementId } },
+      { $match: { userId: req.user._id, achievementId: { $in: ids } } },
+      { $group: { _id: '$characterId', completedAt: { $min: '$completedAt' } } },
       {
         $lookup: {
           from: Character.collection.name,
-          localField: 'characterId',
+          localField: '_id',
           foreignField: '_id',
           as: 'char',
         },
@@ -69,7 +80,7 @@ export async function getAchievementCharacters(req, res, next) {
       },
       { $sort: { name: 1 } },
     ]);
-    res.json({ achievement: { achievementId, name: meta?.name || '', points: meta?.points }, characters });
+    res.json({ achievement: { achievementId, name, points: meta?.points }, characters });
   } catch (err) {
     next(err);
   }
@@ -80,24 +91,27 @@ export async function getAllQuests(req, res, next) {
   try {
     const quests = await CharacterQuest.aggregate([
       { $match: { userId: req.user._id } },
-      { $group: { _id: '$questId', characterCount: { $sum: 1 } } },
       {
         $lookup: {
           from: QuestMeta.collection.name,
-          localField: '_id',
+          localField: 'questId',
           foreignField: 'questId',
           as: 'meta',
         },
       },
       { $unwind: { path: '$meta', preserveNullAndEmptyArrays: true } },
+      { $addFields: { _name: { $ifNull: ['$meta.name', ''] } } },
       {
-        $project: {
-          _id: 0,
-          questId: '$_id',
-          name: { $ifNull: ['$meta.name', ''] },
-          characterCount: 1,
+        $group: {
+          _id: {
+            $cond: [{ $gt: ['$_name', ''] }, '$_name', { $concat: ['#', { $toString: '$questId' }] }],
+          },
+          name: { $first: '$_name' },
+          questId: { $first: '$questId' },
+          chars: { $addToSet: '$characterId' },
         },
       },
+      { $project: { _id: 0, name: 1, questId: 1, characterCount: { $size: '$chars' } } },
       { $sort: { name: 1 } },
     ]);
     res.json({ quests });
@@ -111,12 +125,18 @@ export async function getQuestCharacters(req, res, next) {
   try {
     const questId = Number(req.params.questId);
     const meta = await QuestMeta.findOne({ questId }).lean();
+    const name = meta?.name || '';
+    const ids = name
+      ? (await QuestMeta.find({ name }).select('questId').lean()).map((m) => m.questId)
+      : [questId];
+
     const characters = await CharacterQuest.aggregate([
-      { $match: { userId: req.user._id, questId } },
+      { $match: { userId: req.user._id, questId: { $in: ids } } },
+      { $group: { _id: '$characterId' } },
       {
         $lookup: {
           from: Character.collection.name,
-          localField: 'characterId',
+          localField: '_id',
           foreignField: '_id',
           as: 'char',
         },
@@ -135,7 +155,7 @@ export async function getQuestCharacters(req, res, next) {
       },
       { $sort: { name: 1 } },
     ]);
-    res.json({ quest: { questId, name: meta?.name || '' }, characters });
+    res.json({ quest: { questId, name }, characters });
   } catch (err) {
     next(err);
   }

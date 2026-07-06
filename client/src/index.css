@@ -511,11 +511,18 @@ a:hover {
   color: var(--muted);
   font-size: 0.9rem;
 }
-.character-hero {
+.detail-top {
   display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
+  gap: 1.25rem;
+  align-items: stretch; /* info card matches the portrait's height */
   flex-wrap: wrap;
+}
+.character-hero {
+  flex: 1 1 300px;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
   border-left: 3px solid var(--panel-border);
 }
 .character-hero.faction-horde {
@@ -524,10 +531,16 @@ a:hover {
 .character-hero.faction-alliance {
   border-left-color: #2f6fb0;
 }
+
+/* The render sits beside the info card (not inside a box). Its transparent
+   margins blend into the page background, so there's no empty box around her
+   and her head lines up with the character name. */
+/* High-res main-raw render in a portrait box: cover shows the full character
+   height (crops only the sides) so no head is cut, and downscaling keeps it
+   crisp for every character. */
 .hero-portrait {
-  flex: 0 0 auto;
-  width: 260px;
-  max-width: 100%;
+  flex: 0 0 240px;
+  width: 240px;
   height: 340px;
   border-radius: 14px;
   overflow: hidden;
@@ -540,7 +553,11 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center bottom;
+  /* Enlarge, anchored at the feet, to trim the empty headroom above the
+     character without cropping the figure. */
+  transform: scale(1.3);
+  transform-origin: center bottom;
 }
 .hero-portrait .avatar-fallback {
   font-size: 5rem;
