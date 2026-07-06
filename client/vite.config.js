@@ -7,7 +7,9 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173,
+    // GoodEats runs on 5173; pin this app to 5175 so ports stay predictable.
+    port: 5175,
+    strictPort: true,
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
