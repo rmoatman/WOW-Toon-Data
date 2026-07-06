@@ -125,9 +125,17 @@ export async function unlink(req, res, next) {
     user.blizzardAccessToken = null;
     user.blizzardTokenExpires = null;
     await user.save();
-    // Characters are removed here; achievement/quest cleanup joins in later milestones.
-    const { default: Character } = await import('../models/Character.js');
-    await Character.deleteMany({ userId: user._id });
+    const [{ default: Character }, { default: CharacterAchievement }, { default: CharacterQuest }] =
+      await Promise.all([
+        import('../models/Character.js'),
+        import('../models/CharacterAchievement.js'),
+        import('../models/CharacterQuest.js'),
+      ]);
+    await Promise.all([
+      Character.deleteMany({ userId: user._id }),
+      CharacterAchievement.deleteMany({ userId: user._id }),
+      CharacterQuest.deleteMany({ userId: user._id }),
+    ]);
     res.json({ ok: true });
   } catch (err) {
     next(err);

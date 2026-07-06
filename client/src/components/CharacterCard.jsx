@@ -1,5 +1,5 @@
-// A single character tile in the roster grid. The detail page (M5) will link
-// from here; for now it shows the summary data from the roster import.
+// A single character tile in the roster grid, showing the summary data from
+// the deep sync (image, item level, achievement/quest counts).
 export default function CharacterCard({ character }) {
   const factionClass =
     character.faction?.toLowerCase() === 'horde'
@@ -7,6 +7,8 @@ export default function CharacterCard({ character }) {
       : character.faction?.toLowerCase() === 'alliance'
         ? 'faction-alliance'
         : '';
+
+  const unavailable = character.profileAvailable === false;
 
   return (
     <article className={`character-card ${factionClass}`}>
@@ -27,6 +29,16 @@ export default function CharacterCard({ character }) {
           {character.realmName || character.realmSlug}
           {character.faction ? ` · ${character.faction}` : ''}
         </p>
+
+        {unavailable ? (
+          <p className="character-note">Log in on this character in-game to sync its data.</p>
+        ) : (
+          <div className="character-stats">
+            {character.itemLevel ? <span title="Item level">iLvl {character.itemLevel}</span> : null}
+            <span title="Achievements completed">🏆 {character.achievementCount}</span>
+            <span title="Quests completed">📜 {character.questCount}</span>
+          </div>
+        )}
       </div>
     </article>
   );

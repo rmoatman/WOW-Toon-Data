@@ -9,6 +9,7 @@ import healthRouter from './routes/health.js';
 import authRouter from './routes/auth.js';
 import blizzardRouter from './routes/blizzard.js';
 import charactersRouter from './routes/characters.js';
+import syncRouter from './routes/sync.js';
 
 export function createApp() {
   const app = express();
@@ -33,6 +34,7 @@ export function createApp() {
   app.use('/api/auth', authRouter);
   app.use('/api/blizzard', blizzardRouter);
   app.use('/api/characters', charactersRouter);
+  app.use('/api/sync', syncRouter);
 
   // API 404
   app.use('/api', (req, res) => {

@@ -14,6 +14,33 @@ export async function getAccountProfile(userToken, region = 'us') {
   });
 }
 
+// Blizzard character paths require a lowercased, URL-encoded character name.
+function characterBase(realmSlug, name) {
+  return `/profile/wow/character/${realmSlug}/${encodeURIComponent(name.toLowerCase())}`;
+}
+
+export function getCharacterSummary(region, realmSlug, name) {
+  return blizzardGet(characterBase(realmSlug, name), { region });
+}
+
+export function getCharacterMedia(region, realmSlug, name) {
+  return blizzardGet(`${characterBase(realmSlug, name)}/character-media`, { region });
+}
+
+export function getCharacterAchievements(region, realmSlug, name) {
+  return blizzardGet(`${characterBase(realmSlug, name)}/achievements`, { region });
+}
+
+export function getCharacterQuestsCompleted(region, realmSlug, name) {
+  return blizzardGet(`${characterBase(realmSlug, name)}/quests/completed`, { region });
+}
+
+// Pull an image URL out of the media assets list by key (avatar, inset, main-raw).
+export function pickMediaAsset(media, key) {
+  const asset = (media?.assets || []).find((a) => a.key === key);
+  return asset?.value || '';
+}
+
 // Capitalize a realm slug fallback like "argent-dawn" -> "Argent Dawn".
 function titleFromSlug(slug = '') {
   return slug

@@ -1,19 +1,19 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { blizzardApi, charactersApi } from '../api.js';
+import { blizzardApi, charactersApi, syncApi } from '../api.js';
 import CharacterCard from '../components/CharacterCard.jsx';
 
 const LINK_ERRORS = {
   state_mismatch: 'Security check failed. Please try connecting again.',
   bad_state: 'The link request expired. Please try again.',
-  sync_failed: 'Connected, but importing your roster failed. Try Re-sync.',
+  sync_failed: 'Connected, but importing your roster failed. Try Sync now.',
   missing_code: 'Battle.net did not return an authorization code.',
   access_denied: 'You declined the Battle.net authorization.',
 };
 
 export default function Dashboard() {
-  const { user, setUser } = useAuth();
+  const { setUser } = useAuth();
   const [params, setParams] = useSearchParams();
 
   const [status, setStatus] = useState(null);
@@ -21,25 +21,50 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [banner, setBanner] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const autoSyncedRef = useRef(false);
+
+  const loadCharacters = useCallback(async () => {
+    const chars = await charactersApi.list();
+    setCharacters(chars.characters || []);
+    return chars.characters || [];
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [st, chars] = await Promise.all([blizzardApi.status(), charactersApi.list()]);
+      const [st] = await Promise.all([blizzardApi.status(), loadCharacters()]);
       setStatus(st);
-      setCharacters(chars.characters || []);
     } catch (err) {
       setBanner({ type: 'error', text: err.message });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loadCharacters]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  // Show a banner based on the ?linked=... redirect from the OAuth callback.
+  // Auto-sync stale characters once per visit (update-on-access), then refresh.
+  useEffect(() => {
+    if (loading || autoSyncedRef.current) return;
+    if (!status?.linked) return;
+    autoSyncedRef.current = true;
+    (async () => {
+      setSyncing(true);
+      try {
+        const res = await syncApi.all(false);
+        if (res.synced > 0) await loadCharacters();
+      } catch {
+        /* non-fatal; manual Sync now is available */
+      } finally {
+        setSyncing(false);
+      }
+    })();
+  }, [loading, status, loadCharacters]);
+
+  // Banner from the OAuth callback redirect.
   useEffect(() => {
     const linked = params.get('linked');
     if (!linked) return;
@@ -48,8 +73,7 @@ export default function Dashboard() {
       setBanner({ type: 'success', text: `Battle.net connected — imported ${n || 0} characters.` });
       setUser((u) => (u ? { ...u, battlenetLinked: true } : u));
     } else if (linked === 'error') {
-      const reason = params.get('reason');
-      setBanner({ type: 'error', text: LINK_ERRORS[reason] || 'Could not connect Battle.net.' });
+      setBanner({ type: 'error', text: LINK_ERRORS[params.get('reason')] || 'Could not connect Battle.net.' });
     }
     params.delete('linked');
     params.delete('imported');
@@ -61,24 +85,28 @@ export default function Dashboard() {
     setBusy(true);
     try {
       const { url } = await blizzardApi.authorize();
-      window.location.href = url; // hand off to Battle.net
+      window.location.href = url;
     } catch (err) {
       setBanner({ type: 'error', text: err.message });
       setBusy(false);
     }
   };
 
-  const resync = async () => {
+  // Full refresh: pull any new characters (roster) then deep-sync everything.
+  const syncNow = async () => {
     setBusy(true);
+    setSyncing(true);
     setBanner(null);
     try {
-      const res = await blizzardApi.resync();
+      await blizzardApi.resync().catch(() => null); // roster; ok if token expired
+      const res = await syncApi.all(true);
       await load();
-      setBanner({ type: 'success', text: `Re-synced — ${res.imported} characters.` });
+      setBanner({ type: 'success', text: `Synced ${res.synced} characters.` });
     } catch (err) {
       setBanner({ type: 'error', text: err.message });
     } finally {
       setBusy(false);
+      setSyncing(false);
     }
   };
 
@@ -100,7 +128,10 @@ export default function Dashboard() {
 
   return (
     <div className="page">
-      <h1>Your characters</h1>
+      <div className="page-head">
+        <h1>Your characters</h1>
+        {syncing && <span className="sync-pill">Syncing…</span>}
+      </div>
 
       {banner && <p className={banner.type === 'success' ? 'form-success' : 'form-error'}>{banner.text}</p>}
 
@@ -136,8 +167,8 @@ export default function Dashboard() {
                   <strong>{status.battletag || 'Battle.net'}</strong>
                 </div>
                 <div className="linked-actions">
-                  <button type="button" className="btn-secondary" onClick={resync} disabled={busy}>
-                    {busy ? 'Working…' : 'Re-sync'}
+                  <button type="button" className="btn-secondary" onClick={syncNow} disabled={busy}>
+                    {busy ? 'Working…' : 'Sync now'}
                   </button>
                   <button type="button" className="btn-danger" onClick={unlink} disabled={busy}>
                     Disconnect

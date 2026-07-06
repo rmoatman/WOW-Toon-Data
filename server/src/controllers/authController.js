@@ -1,4 +1,7 @@
 import User from '../models/User.js';
+import Character from '../models/Character.js';
+import CharacterAchievement from '../models/CharacterAchievement.js';
+import CharacterQuest from '../models/CharacterQuest.js';
 import env from '../config/env.js';
 import { AUTH_COOKIE, authCookieOptions, clearCookieOptions } from '../config/cookies.js';
 import {
@@ -141,8 +144,11 @@ export async function deleteAccount(req, res, next) {
     if (req.user.isDemo) {
       throw badRequest('The demo account cannot be deleted.');
     }
-    // NOTE: character/achievement/quest cleanup is added alongside those models
-    // in later milestones (delete by userId).
+    await Promise.all([
+      Character.deleteMany({ userId: req.user._id }),
+      CharacterAchievement.deleteMany({ userId: req.user._id }),
+      CharacterQuest.deleteMany({ userId: req.user._id }),
+    ]);
     await User.deleteOne({ _id: req.user._id });
     res.clearCookie(AUTH_COOKIE, clearCookieOptions());
     res.json({ ok: true });

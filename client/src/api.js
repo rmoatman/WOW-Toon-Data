@@ -55,4 +55,9 @@ export const blizzardApi = {
 export const charactersApi = {
   list: () => api.get('/api/characters'),
   get: (id) => api.get(`/api/characters/${id}`),
+  syncOne: (id) => api.post(`/api/characters/${id}/sync`),
+};
+
+export const syncApi = {
+  all: (force = false) => api.post('/api/sync', { force }),
 };
