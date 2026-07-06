@@ -11,7 +11,15 @@ const env = {
     .filter(Boolean),
   mongoUri: process.env.MONGO_URI || '',
   jwtSecret: process.env.JWT_SECRET || '',
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   tokenEncryptionKey: process.env.TOKEN_ENCRYPTION_KEY || '',
+  email: {
+    host: process.env.EMAIL_HOST || '',
+    port: Number(process.env.EMAIL_PORT) || 587,
+    user: process.env.EMAIL_USER || '',
+    pass: process.env.EMAIL_PASS || '',
+    from: process.env.EMAIL_FROM || 'WOW-Toon-Data <no-reply@wow-toon-data.app>',
+  },
   blizzard: {
     clientId: process.env.BLIZZARD_CLIENT_ID || '',
     clientSecret: process.env.BLIZZARD_CLIENT_SECRET || '',

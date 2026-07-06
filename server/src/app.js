@@ -6,9 +6,14 @@ import cookieParser from 'cookie-parser';
 
 import env, { isProd } from './config/env.js';
 import healthRouter from './routes/health.js';
+import authRouter from './routes/auth.js';
 
 export function createApp() {
   const app = express();
+
+  // Render terminates TLS at its proxy; trust it so secure cookies and
+  // rate-limiter IP detection work correctly.
+  if (isProd) app.set('trust proxy', 1);
 
   app.use(helmet());
   app.use(
@@ -23,6 +28,7 @@ export function createApp() {
 
   // Routes
   app.use('/api/health', healthRouter);
+  app.use('/api/auth', authRouter);
 
   // API 404
   app.use('/api', (req, res) => {

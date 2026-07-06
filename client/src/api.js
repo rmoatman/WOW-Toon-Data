@@ -2,16 +2,45 @@
 // proxy (/api -> localhost:5000). In prod it points at the Render API URL.
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
-export async function apiGet(path) {
+async function request(path, { method = 'GET', body } = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
+    method,
     credentials: 'include',
+    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
   });
-  if (!res.ok) {
-    throw new Error(`Request failed: ${res.status}`);
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    // no JSON body
   }
-  return res.json();
+
+  if (!res.ok) {
+    const message = data?.error || `Request failed (${res.status})`;
+    const err = new Error(message);
+    err.status = res.status;
+    throw err;
+  }
+  return data;
 }
 
-export function getHealth() {
-  return apiGet('/api/health');
-}
+export const api = {
+  get: (path) => request(path),
+  post: (path, body) => request(path, { method: 'POST', body }),
+  del: (path, body) => request(path, { method: 'DELETE', body }),
+};
+
+// ---- Endpoints ----
+export const getHealth = () => api.get('/api/health');
+
+export const authApi = {
+  me: () => api.get('/api/auth/me'),
+  register: (payload) => api.post('/api/auth/register', payload),
+  login: (payload) => api.post('/api/auth/login', payload),
+  logout: () => api.post('/api/auth/logout'),
+  forgotPassword: (email) => api.post('/api/auth/forgot-password', { email }),
+  resetPassword: (token, password) => api.post('/api/auth/reset-password', { token, password }),
+  deleteAccount: () => api.del('/api/auth/account'),
+};
