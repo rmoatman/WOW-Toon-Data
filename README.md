@@ -65,6 +65,12 @@ See `server/.env.example` and `client/.env.example` for the full list. The Blizz
 - **Key env vars:** `CLIENT_URL` = the service's own URL (used for the post-OAuth redirect); `BLIZZARD_REDIRECT_URI` = `<service-url>/api/blizzard/callback`, matched exactly in the Blizzard developer portal.
 - Locally, `npm run dev` still runs the client (Vite, `:5173`) and API (`:5000`) separately, with Vite proxying `/api` — so dev is same-origin too.
 
+## Challenges & solutions
+
+The non-obvious problems this project hit — Blizzard API quirks, the collections
+media pipeline, the Render deployment, and the third-party-cookie/single-origin
+saga — are written up in [`docs/CHALLENGES.md`](docs/CHALLENGES.md).
+
 ## Roadmap
 
 - [x] **M1 — Scaffold:** monorepo, Vite client, Express API, Mongo connection, health check, Render config.
