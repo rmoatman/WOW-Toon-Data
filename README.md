@@ -65,6 +65,12 @@ See `server/.env.example` and `client/.env.example` for the full list. The Blizz
 - **Key env vars:** `CLIENT_URL` = the service's own URL (used for the post-OAuth redirect); `BLIZZARD_REDIRECT_URI` = `<service-url>/api/blizzard/callback`, matched exactly in the Blizzard developer portal.
 - Locally, `npm run dev` still runs the client (Vite, `:5173`) and API (`:5000`) separately, with Vite proxying `/api` — so dev is same-origin too.
 
+## Security
+
+Secrets are supplied only via environment variables (and a git-ignored
+`server/.env`) — none live in this repo or its history. See
+[`SECURITY.md`](SECURITY.md) for the full policy and how to report an issue.
+
 ## Challenges & solutions
 
 The non-obvious problems this project hit — Blizzard API quirks, the collections
