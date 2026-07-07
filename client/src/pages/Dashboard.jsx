@@ -155,11 +155,14 @@ export default function Dashboard() {
       ) : (
         <>
           <section className="card connect-card">
-            {!status?.configured && (
+            {status && !status.configured && (
               <p className="muted">
                 The server isn't configured with Blizzard API credentials yet, so linking is
                 unavailable.
               </p>
+            )}
+            {!status && (
+              <p className="muted">Couldn't reach the server. Please refresh in a moment.</p>
             )}
 
             {status?.configured && !linked && (
