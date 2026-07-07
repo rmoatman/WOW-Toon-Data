@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Toons and Other WoW Stuff">
+  <!-- Full-bleed dark background so the icon works as a maskable icon. -->
+  <rect width="512" height="512" fill="#14161f"/>
+  <!-- Heraldic shield. -->
+  <path d="M256 92 L404 142 V282 C404 366 332 418 256 448 C180 418 108 366 108 282 V142 Z"
+        fill="#1b1e2b" stroke="#f8b700" stroke-width="18" stroke-linejoin="round"/>
+  <!-- Stylized flame, echoing the dragon-fire theme. -->
+  <path d="M256 168
+           C298 214 306 244 288 286
+           C282 300 292 310 284 328
+           C276 346 258 356 256 372
+           C254 356 236 346 228 328
+           C220 310 230 300 224 286
+           C206 244 214 214 256 168 Z"
+        fill="#f8b700"/>
+  <path d="M256 232 C274 258 276 278 266 300 C261 311 268 320 256 336 C244 320 251 311 246 300 C236 278 238 258 256 232 Z"
+        fill="#ffc933"/>
+</svg>
