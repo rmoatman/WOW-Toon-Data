@@ -6,12 +6,11 @@ import CharacterHitList from '../components/CharacterHitList.jsx';
 
 const COLUMNS = [
   { key: 'name', label: 'Achievement', sortable: true },
-  { key: 'points', label: 'Points', sortable: true, className: 'col-num', render: (v) => v ?? '—' },
   {
     key: 'characterCount',
     label: 'Characters',
     sortable: true,
-    className: 'col-num',
+    className: 'col-center',
   },
 ];
 

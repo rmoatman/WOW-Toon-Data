@@ -1,12 +1,29 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Link, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { SITE } from '../config.js';
 import { ownerPrefix } from '../util/brand.js';
 import Footer from './Footer.jsx';
 
+// Background art rotated randomly on each screen change.
+const BACKGROUNDS = ['/hero-bg.png', '/Forest-bg.png', '/Seige-bg.png'];
+
 export default function Layout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const lastBgRef = useRef(-1);
+
+  // Pick a random background on each screen change, never the same one twice
+  // in a row.
+  useEffect(() => {
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * BACKGROUNDS.length);
+    } while (idx === lastBgRef.current && BACKGROUNDS.length > 1);
+    lastBgRef.current = idx;
+    document.documentElement.style.setProperty('--hero-bg', `url('${BACKGROUNDS[idx]}')`);
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     await logout();

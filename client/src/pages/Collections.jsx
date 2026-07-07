@@ -20,22 +20,22 @@ const thumbColumn = (type, idKey) => ({
 const MOUNT_COLUMNS = [
   thumbColumn('mount', 'mountId'),
   { key: 'name', label: 'Mount', sortable: true },
-  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-num', render: favorite },
+  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-center', render: favorite },
 ];
 
 const PET_COLUMNS = [
   thumbColumn('pet', 'speciesId'),
   { key: 'name', label: 'Pet', sortable: true },
-  { key: 'nickname', label: 'Nickname', sortable: true, render: (v) => v || '—' },
-  { key: 'level', label: 'Level', sortable: true, className: 'col-num', render: (v) => v ?? '—' },
+  { key: 'nickname', label: 'Nickname', sortable: true, className: 'col-center', render: (v) => v || '—' },
+  { key: 'level', label: 'Level', sortable: true, className: 'col-center', render: (v) => v ?? '—' },
   { key: 'quality', label: 'Quality', sortable: true, render: (v) => v || '—' },
-  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-num', render: favorite },
+  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-center', render: favorite },
 ];
 
 const TOY_COLUMNS = [
   thumbColumn('toy', 'toyId'),
   { key: 'name', label: 'Toy', sortable: true },
-  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-num', render: favorite },
+  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-center', render: favorite },
 ];
 
 // key -> label, table columns, search keys, and which api call loads it.

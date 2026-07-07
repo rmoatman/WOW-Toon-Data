@@ -6,7 +6,7 @@ import CharacterHitList from '../components/CharacterHitList.jsx';
 
 const COLUMNS = [
   { key: 'name', label: 'Quest', sortable: true },
-  { key: 'characterCount', label: 'Characters', sortable: true, className: 'col-num' },
+  { key: 'characterCount', label: 'Characters', sortable: true, className: 'col-center' },
 ];
 
 export default function Quests() {

@@ -19,6 +19,8 @@
   --bad: #f87171;
   --danger: #dc2626;
   --danger-hover: #ef4444;
+  /* Swapped per screen by Layout; falls back to the original art. */
+  --hero-bg: url('/hero-bg.png');
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
@@ -32,8 +34,8 @@ body {
      readable. `fixed` keeps it steady while the page scrolls; var(--bg) is the
      fallback if the image is missing. */
   background:
-    linear-gradient(rgba(20, 22, 31, 0.5), rgba(20, 22, 31, 0.66)),
-    url('/hero-bg.png') center top / cover no-repeat fixed,
+    linear-gradient(rgba(20, 22, 31, 0.68), rgba(20, 22, 31, 0.8)),
+    var(--hero-bg) center top / cover no-repeat fixed,
     var(--bg);
   color: var(--text);
   line-height: 1.55;
@@ -739,6 +741,8 @@ a.feature:hover {
   overflow-x: auto;
   border: 1px solid var(--panel-border);
   border-radius: 10px;
+  /* Calm backdrop so list rows stay readable over the rotating background art. */
+  background: rgba(20, 22, 31, 0.82);
 }
 .table {
   width: 100%;
