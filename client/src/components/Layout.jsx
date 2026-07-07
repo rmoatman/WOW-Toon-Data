@@ -38,7 +38,7 @@ export default function Layout() {
 
   return (
     <div className="app-shell">
-      <header className="site-header">
+      <header className={`site-header${user ? '' : ' guest'}`}>
         <Link to="/" className="brand">
           {ownerPrefix(user)}
           {beforeWow}

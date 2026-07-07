@@ -976,6 +976,13 @@ a.feature:hover {
     border-radius: 2px;
   }
 
+  /* Logged-out (login/signup, etc.): center the brand on its own row, with the
+     Log in/Sign up links centered below it. */
+  .site-header.guest .brand {
+    width: 100%;
+    text-align: center;
+  }
+
   /* Logged-out nav: wrap to a centered full-width row. */
   .site-nav {
     justify-content: center;
