@@ -34,7 +34,7 @@ body {
      readable. `fixed` keeps it steady while the page scrolls; var(--bg) is the
      fallback if the image is missing. */
   background:
-    linear-gradient(rgba(20, 22, 31, 0.68), rgba(20, 22, 31, 0.8)),
+    linear-gradient(rgba(20, 22, 31, 0.5), rgba(20, 22, 31, 0.66)),
     var(--hero-bg) center top / cover no-repeat fixed,
     var(--bg);
   color: var(--text);
@@ -741,8 +741,8 @@ a.feature:hover {
   overflow-x: auto;
   border: 1px solid var(--panel-border);
   border-radius: 10px;
-  /* Calm backdrop so list rows stay readable over the rotating background art. */
-  background: rgba(20, 22, 31, 0.82);
+  /* Near-solid backdrop so list rows stay readable over the brighter art. */
+  background: rgba(20, 22, 31, 0.94);
 }
 .table {
   width: 100%;

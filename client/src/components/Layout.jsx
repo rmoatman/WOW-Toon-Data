@@ -6,7 +6,13 @@ import { ownerPrefix } from '../util/brand.js';
 import Footer from './Footer.jsx';
 
 // Background art rotated randomly on each screen change.
-const BACKGROUNDS = ['/hero-bg.png', '/Forest-bg.png', '/Seige-bg.png'];
+const BACKGROUNDS = [
+  '/hero-bg.png',
+  '/Forest-bg.png',
+  '/Seige-bg.png',
+  '/desert-bg.png',
+  '/kraken-bg.png',
+];
 
 export default function Layout() {
   const { user, logout } = useAuth();
