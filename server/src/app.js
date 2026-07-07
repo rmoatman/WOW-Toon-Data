@@ -1,10 +1,16 @@
 import express from 'express';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 
 import env, { isProd } from './config/env.js';
+
+// The built React app (client/dist), served from the same origin as the API in
+// production so the auth cookie is first-party (works in Safari/iOS).
+const clientDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../client/dist');
 import healthRouter from './routes/health.js';
 import authRouter from './routes/auth.js';
 import blizzardRouter from './routes/blizzard.js';
@@ -52,10 +58,20 @@ export function createApp() {
   app.use('/api/collections', collectionsRouter);
   app.use('/api/sync', syncRouter);
 
-  // API 404
+  // API 404 (unmatched /api routes)
   app.use('/api', (req, res) => {
     res.status(404).json({ error: 'Not found' });
   });
+
+  // In production, serve the built SPA from this same origin. Static assets are
+  // served directly; any other GET falls back to index.html for client-side
+  // routing. (In dev the Vite server hosts the app and proxies /api.)
+  if (isProd) {
+    app.use(express.static(clientDist));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(clientDist, 'index.html'));
+    });
+  }
 
   // Centralized error handler
   // eslint-disable-next-line no-unused-vars

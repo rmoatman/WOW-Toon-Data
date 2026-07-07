@@ -13,7 +13,7 @@ function stateCookieOptions() {
   return {
     httpOnly: true,
     secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
+    sameSite: 'lax', // first-party now; Lax survives the top-level OAuth redirect
     maxAge: 10 * 60 * 1000, // 10 minutes
     path: '/',
   };
