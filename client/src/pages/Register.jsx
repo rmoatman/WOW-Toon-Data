@@ -40,7 +40,7 @@ export default function Register() {
       {error && <p className="form-error">{error}</p>}
       <form onSubmit={onSubmit} className="form">
         <label>
-          Display name <span className="optional">(optional)</span>
+          First name
           <input type="text" value={form.displayName} onChange={update('displayName')} />
         </label>
         <label>

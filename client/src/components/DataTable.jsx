@@ -118,7 +118,7 @@ export default function DataTable({
                   {columns.map((col) => (
                     <th
                       key={col.key}
-                      className={[col.className, col.sortable ? 'sortable' : '']
+                      className={[col.className, col.sortable ? 'sortable' : '', col.hideMobile ? 'hide-mobile' : '']
                         .filter(Boolean)
                         .join(' ')}
                       onClick={col.sortable ? () => toggleSort(col.key) : undefined}
@@ -140,7 +140,12 @@ export default function DataTable({
                     onClick={onRowClick ? () => onRowClick(row) : undefined}
                   >
                     {columns.map((col) => (
-                      <td key={col.key} className={col.className || ''}>
+                      <td
+                        key={col.key}
+                        className={[col.className, col.hideMobile ? 'hide-mobile' : '']
+                          .filter(Boolean)
+                          .join(' ')}
+                      >
                         {col.render ? col.render(row[col.key], row) : row[col.key]}
                       </td>
                     ))}

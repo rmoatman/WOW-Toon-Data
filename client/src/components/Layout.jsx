@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { SITE } from '../config.js';
@@ -13,9 +13,10 @@ export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const lastBgRef = useRef(-1);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Pick a random background on each screen change, never the same one twice
-  // in a row.
+  // in a row; also close the mobile menu on navigation.
   useEffect(() => {
     let idx;
     do {
@@ -23,6 +24,7 @@ export default function Layout() {
     } while (idx === lastBgRef.current && BACKGROUNDS.length > 1);
     lastBgRef.current = idx;
     document.documentElement.style.setProperty('--hero-bg', `url('${BACKGROUNDS[idx]}')`);
+    setMenuOpen(false);
   }, [location.pathname]);
 
   const handleLogout = async () => {
@@ -43,7 +45,23 @@ export default function Layout() {
           <span className="brand-wow">WoW</span>
           {afterWow}
         </Link>
-        <nav className="site-nav" aria-label="Primary">
+        {user && (
+          <button
+            type="button"
+            className="nav-toggle"
+            aria-label="Menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        )}
+        <nav
+          className={`site-nav ${user ? 'collapsible' : ''} ${menuOpen ? 'open' : ''}`}
+          aria-label="Primary"
+        >
           {user ? (
             <>
               <NavLink to="/dashboard">Characters</NavLink>

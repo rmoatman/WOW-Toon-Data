@@ -26,10 +26,10 @@ const MOUNT_COLUMNS = [
 const PET_COLUMNS = [
   thumbColumn('pet', 'speciesId'),
   { key: 'name', label: 'Pet', sortable: true },
-  { key: 'nickname', label: 'Nickname', sortable: true, className: 'col-center', render: (v) => v || '—' },
+  { key: 'nickname', label: 'Nickname', sortable: true, className: 'col-center', hideMobile: true, render: (v) => v || '—' },
   { key: 'level', label: 'Level', sortable: true, className: 'col-center', render: (v) => v ?? '—' },
-  { key: 'quality', label: 'Quality', sortable: true, render: (v) => v || '—' },
-  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-center', render: favorite },
+  { key: 'quality', label: 'Quality', sortable: true, hideMobile: true, render: (v) => v || '—' },
+  { key: 'isFavorite', label: 'Favorite', sortable: true, className: 'col-center', hideMobile: true, render: favorite },
 ];
 
 const TOY_COLUMNS = [

@@ -29,7 +29,7 @@ export default function Account() {
         <dl className="account-details">
           <dt>Email</dt>
           <dd>{user.email}</dd>
-          <dt>Display name</dt>
+          <dt>First name</dt>
           <dd>{user.displayName || <span className="muted">—</span>}</dd>
           <dt>Battle.net</dt>
           <dd>{user.battlenetLinked ? user.battletag || 'Linked' : <span className="muted">Not linked</span>}</dd>
