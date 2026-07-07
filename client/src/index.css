@@ -741,8 +741,8 @@ a.feature:hover {
   overflow-x: auto;
   border: 1px solid var(--panel-border);
   border-radius: 10px;
-  /* Near-solid backdrop so list rows stay readable over the brighter art. */
-  background: rgba(20, 22, 31, 0.94);
+  /* Mostly-solid backdrop so list rows stay readable while a little art shows. */
+  background: rgba(20, 22, 31, 0.88);
 }
 .table {
   width: 100%;
