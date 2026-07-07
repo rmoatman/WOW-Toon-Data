@@ -11,6 +11,7 @@ import blizzardRouter from './routes/blizzard.js';
 import charactersRouter from './routes/characters.js';
 import achievementsRouter from './routes/achievements.js';
 import questsRouter from './routes/quests.js';
+import collectionsRouter from './routes/collections.js';
 import syncRouter from './routes/sync.js';
 
 export function createApp() {
@@ -38,6 +39,7 @@ export function createApp() {
   app.use('/api/characters', charactersRouter);
   app.use('/api/achievements', achievementsRouter);
   app.use('/api/quests', questsRouter);
+  app.use('/api/collections', collectionsRouter);
   app.use('/api/sync', syncRouter);
 
   // API 404

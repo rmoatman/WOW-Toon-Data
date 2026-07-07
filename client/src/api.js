@@ -29,6 +29,7 @@ async function request(path, { method = 'GET', body } = {}) {
 export const api = {
   get: (path) => request(path),
   post: (path, body) => request(path, { method: 'POST', body }),
+  patch: (path, body) => request(path, { method: 'PATCH', body }),
   del: (path, body) => request(path, { method: 'DELETE', body }),
 };
 
@@ -58,6 +59,7 @@ export const charactersApi = {
   achievements: (id) => api.get(`/api/characters/${id}/achievements`),
   quests: (id) => api.get(`/api/characters/${id}/quests`),
   syncOne: (id) => api.post(`/api/characters/${id}/sync`),
+  setHidden: (id, hidden) => api.patch(`/api/characters/${id}`, { hidden }),
 };
 
 export const syncApi = {
@@ -73,3 +75,12 @@ export const questsApi = {
   list: () => api.get('/api/quests'),
   characters: (questId) => api.get(`/api/quests/${questId}/characters`),
 };
+
+export const collectionsApi = {
+  mounts: () => api.get('/api/collections/mounts'),
+  pets: () => api.get('/api/collections/pets'),
+};
+
+// Direct <img src> URL for a collectible's render (public passthrough endpoint).
+export const collectibleImageUrl = (type, refId) =>
+  `${API_BASE}/api/collections/media/${type}/${refId}`;

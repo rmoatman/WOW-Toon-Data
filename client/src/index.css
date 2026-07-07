@@ -417,6 +417,7 @@ a:hover {
   gap: 1rem;
 }
 .character-card {
+  position: relative;
   display: flex;
   gap: 0.9rem;
   align-items: center;
@@ -427,6 +428,43 @@ a:hover {
   padding: 1rem;
   color: var(--text);
   transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.character-card--hidden {
+  opacity: 0.55;
+}
+.character-hide-btn {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  line-height: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.12s ease, background 0.12s ease;
+}
+.character-card:hover .character-hide-btn,
+.character-card--hidden .character-hide-btn {
+  opacity: 1;
+}
+.character-hide-btn:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+.roster-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 .character-card:hover {
   text-decoration: none;
@@ -493,11 +531,12 @@ a:hover {
 
 .page-head {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.75rem;
 }
+/* Match the plain `.page h1` spacing used on the Achievements/Quests pages. */
 .page-head h1 {
-  margin: 0;
+  margin-top: 0;
 }
 .sync-pill {
   font-size: 0.78rem;
@@ -716,6 +755,45 @@ a:hover {
   text-align: center;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+}
+.table .col-thumb {
+  width: 68px;
+  padding-right: 0;
+}
+.collectible-thumb {
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden; /* clip the zoomed-in render */
+  background: var(--bg-elevated);
+  cursor: zoom-in;
+}
+.collectible-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Zoom past the transparent padding baked into many mount/pet renders so the
+     creature fills the tile. The hover preview shows the full, uncropped art. */
+  transform: scale(1.4);
+}
+.collectible-preview {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  padding: 4px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.collectible-preview img {
+  display: block;
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 .datatable-pager {
   display: flex;

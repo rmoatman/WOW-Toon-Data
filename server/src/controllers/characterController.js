@@ -22,6 +22,19 @@ export async function listCharacters(req, res, next) {
   }
 }
 
+// PATCH /api/characters/:id  (requireAuth) — update editable fields (hidden).
+export async function updateCharacter(req, res, next) {
+  try {
+    const character = await ownedCharacter(req);
+    if (!character) return res.status(404).json({ error: 'Character not found' });
+    if (typeof req.body?.hidden === 'boolean') character.hidden = req.body.hidden;
+    await character.save();
+    res.json({ character });
+  } catch (err) {
+    next(err);
+  }
+}
+
 // GET /api/characters/:id  (requireAuth) — a single character the user owns.
 export async function getCharacter(req, res, next) {
   try {

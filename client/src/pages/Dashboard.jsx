@@ -22,6 +22,7 @@ export default function Dashboard() {
   const [banner, setBanner] = useState(null);
   const [busy, setBusy] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [showHidden, setShowHidden] = useState(false);
   const autoSyncedRef = useRef(false);
 
   const loadCharacters = useCallback(async () => {
@@ -124,12 +125,26 @@ export default function Dashboard() {
     }
   };
 
+  // Optimistically toggle a character's hidden flag, reverting on failure.
+  const toggleHide = async (character) => {
+    const next = !character.hidden;
+    setCharacters((cs) => cs.map((c) => (c.id === character.id ? { ...c, hidden: next } : c)));
+    try {
+      await charactersApi.setHidden(character.id, next);
+    } catch (err) {
+      setCharacters((cs) => cs.map((c) => (c.id === character.id ? { ...c, hidden: !next } : c)));
+      setBanner({ type: 'error', text: err.message });
+    }
+  };
+
   const linked = status?.linked;
+  const hiddenCount = characters.filter((c) => c.hidden).length;
+  const visibleCharacters = showHidden ? characters : characters.filter((c) => !c.hidden);
 
   return (
     <div className="page">
       <div className="page-head">
-        <h1>Your characters</h1>
+        <h1>Characters</h1>
         {syncing && <span className="sync-pill">Syncing…</span>}
       </div>
 
@@ -179,11 +194,23 @@ export default function Dashboard() {
           </section>
 
           {characters.length > 0 ? (
-            <section className="roster-grid">
-              {characters.map((c) => (
-                <CharacterCard key={c.id} character={c} />
-              ))}
-            </section>
+            <>
+              {hiddenCount > 0 && (
+                <label className="roster-toggle muted">
+                  <input
+                    type="checkbox"
+                    checked={showHidden}
+                    onChange={(e) => setShowHidden(e.target.checked)}
+                  />
+                  Show hidden ({hiddenCount})
+                </label>
+              )}
+              <section className="roster-grid">
+                {visibleCharacters.map((c) => (
+                  <CharacterCard key={c.id} character={c} onToggleHide={toggleHide} />
+                ))}
+              </section>
+            </>
           ) : (
             linked && <p className="muted">No characters found on this account yet.</p>
           )}

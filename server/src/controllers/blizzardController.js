@@ -125,16 +125,22 @@ export async function unlink(req, res, next) {
     user.blizzardAccessToken = null;
     user.blizzardTokenExpires = null;
     await user.save();
-    const [{ default: Character }, { default: CharacterAchievement }, { default: CharacterQuest }] =
-      await Promise.all([
-        import('../models/Character.js'),
-        import('../models/CharacterAchievement.js'),
-        import('../models/CharacterQuest.js'),
-      ]);
+    const [
+      { default: Character },
+      { default: CharacterAchievement },
+      { default: CharacterQuest },
+      { default: UserCollectible },
+    ] = await Promise.all([
+      import('../models/Character.js'),
+      import('../models/CharacterAchievement.js'),
+      import('../models/CharacterQuest.js'),
+      import('../models/UserCollectible.js'),
+    ]);
     await Promise.all([
       Character.deleteMany({ userId: user._id }),
       CharacterAchievement.deleteMany({ userId: user._id }),
       CharacterQuest.deleteMany({ userId: user._id }),
+      UserCollectible.deleteMany({ userId: user._id }),
     ]);
     res.json({ ok: true });
   } catch (err) {

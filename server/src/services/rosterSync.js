@@ -1,5 +1,6 @@
 import Character from '../models/Character.js';
 import { getAccountProfile, normalizeRoster } from './blizzard/profile.js';
+import { syncCollections } from './collectionSync.js';
 
 /**
  * Fetch a user's roster from Blizzard and upsert it into the DB.
@@ -32,5 +33,14 @@ export async function syncRoster(user, userToken) {
     await Character.deleteMany({ _id: { $in: toRemove.map((d) => d._id) } });
   }
 
-  return { imported: roster.length, removed: toRemove.length };
+  // Account-wide mounts/pets. A collections failure must not fail the roster
+  // import, which is the critical path for the OAuth callback.
+  let collections = null;
+  try {
+    collections = await syncCollections(user, userToken);
+  } catch (err) {
+    console.error('[collection sync]', err.response?.data || err.message);
+  }
+
+  return { imported: roster.length, removed: toRemove.length, collections };
 }

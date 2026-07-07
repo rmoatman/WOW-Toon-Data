@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import CharacterDetail from './pages/CharacterDetail.jsx';
 import Achievements from './pages/Achievements.jsx';
 import Quests from './pages/Quests.jsx';
+import Collections from './pages/Collections.jsx';
 import Account from './pages/Account.jsx';
 import About from './pages/About.jsx';
 import Privacy from './pages/Privacy.jsx';
@@ -58,6 +59,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Quests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="collections"
+          element={
+            <ProtectedRoute>
+              <Collections />
             </ProtectedRoute>
           }
         />

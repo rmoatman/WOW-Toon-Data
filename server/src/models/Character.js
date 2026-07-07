@@ -37,6 +37,9 @@ const characterSchema = new mongoose.Schema(
     // (typically low-level/inactive toons not yet indexed until they log in).
     profileAvailable: { type: Boolean, default: true },
 
+    // User-hidden from the dashboard roster (e.g. Classic/retired alts).
+    hidden: { type: Boolean, default: false },
+
     lastSyncedAt: { type: Date, default: null }, // roster-listing sync
     lastDeepSyncedAt: { type: Date, default: null }, // achievements/quests/media sync
   },
@@ -69,6 +72,7 @@ characterSchema.methods.toJSON = function toJSON() {
     achievementCount: this.achievementCount,
     questCount: this.questCount,
     profileAvailable: this.profileAvailable,
+    hidden: this.hidden,
     lastLoginAt: this.lastLoginAt,
     lastSyncedAt: this.lastSyncedAt,
     lastDeepSyncedAt: this.lastDeepSyncedAt,

@@ -23,6 +23,7 @@ export default function Layout() {
               <NavLink to="/dashboard">Characters</NavLink>
               <NavLink to="/achievements">Achievements</NavLink>
               <NavLink to="/quests">Quests</NavLink>
+              <NavLink to="/collections">Collections</NavLink>
               <NavLink to="/account">Account</NavLink>
               <button type="button" className="link-btn" onClick={handleLogout}>
                 Log out
