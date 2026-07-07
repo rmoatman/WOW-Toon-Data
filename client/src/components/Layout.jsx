@@ -1,5 +1,7 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import { SITE } from '../config.js';
+import { ownerPrefix } from '../util/brand.js';
 import Footer from './Footer.jsx';
 
 export default function Layout() {
@@ -11,11 +13,18 @@ export default function Layout() {
     navigate('/');
   };
 
+  // Brand is in the plain (original) font, but the word "WoW" keeps the
+  // decorative LifeCraft font. Split the site name around it so the rest reverts.
+  const [beforeWow, afterWow] = SITE.name.split('WoW');
+
   return (
     <div className="app-shell">
       <header className="site-header">
         <Link to="/" className="brand">
-          My Toons
+          {ownerPrefix(user)}
+          {beforeWow}
+          <span className="brand-wow">WoW</span>
+          {afterWow}
         </Link>
         <nav className="site-nav" aria-label="Primary">
           {user ? (

@@ -7,8 +7,8 @@ import mongoose from 'mongoose';
 // as resolved once imageUrl is set; an empty imageUrl is retried on next request.
 const schema = new mongoose.Schema(
   {
-    type: { type: String, enum: ['mount', 'pet'], required: true },
-    refId: { type: Number, required: true }, // mountId, or pet speciesId
+    type: { type: String, enum: ['mount', 'pet', 'toy'], required: true },
+    refId: { type: Number, required: true }, // mountId, pet speciesId, or toyId
     displayId: { type: Number, default: null }, // creature-display id
     imageUrl: { type: String, default: '' },
   },

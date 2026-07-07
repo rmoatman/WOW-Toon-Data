@@ -40,6 +40,19 @@ export function getAccountPets(userToken, region = 'us') {
   });
 }
 
+/**
+ * Fetch the account-wide toy collection for a user.
+ * Requires a user access token with the wow.profile scope.
+ */
+export function getAccountToys(userToken, region = 'us') {
+  const { profileNamespace } = regionConfig(region);
+  return blizzardGet('/profile/user/wow/collections/toys', {
+    token: userToken,
+    region,
+    namespace: profileNamespace,
+  });
+}
+
 // Static Game Data: a single mount entry (used to find its creature-display id).
 export function getMount(region, mountId) {
   const { staticNamespace } = regionConfig(region);
@@ -51,6 +64,19 @@ export function getMount(region, mountId) {
 export function getPet(region, petSpeciesId) {
   const { staticNamespace } = regionConfig(region);
   return blizzardGet(`/data/wow/pet/${petSpeciesId}`, { region, namespace: staticNamespace });
+}
+
+// Static Game Data: a toy entry. The account toys collection only returns ids,
+// so we resolve the name and item-media id from here.
+export function getToy(region, toyId) {
+  const { staticNamespace } = regionConfig(region);
+  return blizzardGet(`/data/wow/toy/${toyId}`, { region, namespace: staticNamespace });
+}
+
+// Static Game Data: the media (icon) assets for an item id.
+export function getItemMedia(region, itemId) {
+  const { staticNamespace } = regionConfig(region);
+  return blizzardGet(`/data/wow/media/item/${itemId}`, { region, namespace: staticNamespace });
 }
 
 // Static Game Data: the render assets for a creature-display id (shared by the
@@ -159,4 +185,19 @@ export function normalizePets(summary) {
       displayId: p.creature_display?.id ?? null,
     }))
     .filter((p) => p.collectibleId != null);
+}
+
+/**
+ * Flatten a toy collection summary into plain records. The collection only
+ * carries the toy id (and favorite flag) — the name and icon are resolved
+ * separately from the toy game-data endpoint.
+ */
+export function normalizeToys(summary) {
+  return (summary?.toys || [])
+    .map((t) => ({
+      collectibleId: t.toy?.id,
+      name: t.toy?.name || '', // usually absent; resolved from ToyMeta later
+      isFavorite: Boolean(t.is_favorite),
+    }))
+    .filter((t) => t.collectibleId != null);
 }

@@ -79,6 +79,7 @@ export const questsApi = {
 export const collectionsApi = {
   mounts: () => api.get('/api/collections/mounts'),
   pets: () => api.get('/api/collections/pets'),
+  toys: () => api.get('/api/collections/toys'),
 };
 
 // Direct <img src> URL for a collectible's render (public passthrough endpoint).

@@ -2,8 +2,10 @@ import UserCollectible from '../models/UserCollectible.js';
 import {
   getAccountMounts,
   getAccountPets,
+  getAccountToys,
   normalizeMounts,
   normalizePets,
+  normalizeToys,
 } from './blizzard/profile.js';
 import { seedPetDisplays } from './collectibleMedia.js';
 
@@ -44,13 +46,15 @@ async function reconcile(userId, type, desired) {
  */
 export async function syncCollections(user, userToken) {
   const region = user.blizzardRegion || 'us';
-  const [mountsR, petsR] = await Promise.allSettled([
+  const [mountsR, petsR, toysR] = await Promise.allSettled([
     getAccountMounts(userToken, region),
     getAccountPets(userToken, region),
+    getAccountToys(userToken, region),
   ]);
 
   let mounts = null;
   let pets = null;
+  let toys = null;
   if (mountsR.status === 'fulfilled') {
     mounts = await reconcile(user._id, 'mount', normalizeMounts(mountsR.value));
   }
@@ -59,5 +63,9 @@ export async function syncCollections(user, userToken) {
     pets = await reconcile(user._id, 'pet', normalizedPets);
     await seedPetDisplays(normalizedPets); // cache species -> display for images
   }
-  return { mounts, pets };
+  if (toysR.status === 'fulfilled') {
+    // Names/icons are resolved lazily (ToyMeta) when the Toys tab is opened.
+    toys = await reconcile(user._id, 'toy', normalizeToys(toysR.value));
+  }
+  return { mounts, pets, toys };
 }

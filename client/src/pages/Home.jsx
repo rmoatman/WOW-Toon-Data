@@ -2,6 +2,18 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getHealth } from '../api.js';
 import { useAuth } from '../context/AuthContext.jsx';
+import { SITE } from '../config.js';
+
+// Feature cards link to their section. Collections tabs (mounts/pets/toys) all
+// live on /collections.
+const FEATURES = [
+  { title: 'Character detail', blurb: 'Image, stats, achievements, and completed quests for each toon.', to: '/dashboard' },
+  { title: 'Combined achievements', blurb: "Sort and search across all characters; see who's earned what.", to: '/achievements' },
+  { title: 'Combined quests', blurb: "Find any quest and the characters who've completed it.", to: '/quests' },
+  { title: 'Mounts', blurb: "Browse your whole account's mount collection with hover-to-zoom art.", to: '/collections' },
+  { title: 'Pets', blurb: "Every battle pet you've collected — level, quality, and nickname.", to: '/collections' },
+  { title: 'Toys', blurb: 'Your full toy box, names and icons pulled straight from the API.', to: '/collections' },
+];
 
 export default function Home() {
   const { user } = useAuth();
@@ -15,11 +27,12 @@ export default function Home() {
     <div className="page home">
       <section className="hero">
         <h1>
-          Track every achievement and quest,<br />across every character.
+          Every achievement, quest, and collection,<br />across every character.
         </h1>
         <p className="muted">
-          WOW-Toon-Data pulls your World of Warcraft roster from the Blizzard API and lets you
-          search and sort your combined accomplishments in one place.
+          {SITE.name} pulls your World of Warcraft roster from the Blizzard API and brings your
+          accomplishments — plus your account-wide mounts, pets, and toys — together in one place
+          you can search and sort.
         </p>
         <div className="hero-cta">
           {user ? (
@@ -40,18 +53,12 @@ export default function Home() {
       </section>
 
       <section className="feature-grid">
-        <div className="feature">
-          <h3>Character detail</h3>
-          <p>Image, stats, achievements, and completed quests for each toon.</p>
-        </div>
-        <div className="feature">
-          <h3>Combined achievements</h3>
-          <p>Sort and search across all characters; see who's earned what.</p>
-        </div>
-        <div className="feature">
-          <h3>Combined quests</h3>
-          <p>Find any quest and the characters who've completed it.</p>
-        </div>
+        {FEATURES.map((f) => (
+          <Link key={f.title} to={f.to} className="feature">
+            <h3>{f.title}</h3>
+            <p>{f.blurb}</p>
+          </Link>
+        ))}
       </section>
 
       {health && (

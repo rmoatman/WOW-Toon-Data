@@ -28,7 +28,13 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  /* Dragon/knight art layered behind the app, darkened so panels and text stay
+     readable. `fixed` keeps it steady while the page scrolls; var(--bg) is the
+     fallback if the image is missing. */
+  background:
+    linear-gradient(rgba(20, 22, 31, 0.5), rgba(20, 22, 31, 0.66)),
+    url('/hero-bg.png') center top / cover no-repeat fixed,
+    var(--bg);
   color: var(--text);
   line-height: 1.55;
 }
@@ -62,16 +68,23 @@ a:hover {
 }
 
 .brand {
-  font-family: 'LifeCraft', system-ui, sans-serif;
-  font-weight: normal;
-  font-size: 1.7rem;
-  letter-spacing: 0.03em;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.01em;
   color: var(--accent);
   line-height: 1;
 }
 .brand:hover {
   text-decoration: none;
   color: var(--accent-hover);
+}
+/* Keep the "WoW" word in the decorative LifeCraft font. */
+.brand-wow {
+  font-family: 'LifeCraft', system-ui, sans-serif;
+  font-weight: normal;
+  font-size: 1.2em;
+  letter-spacing: 0.03em;
 }
 
 .site-nav {
@@ -120,7 +133,6 @@ a:hover {
 
 /* ---- Footer ---- */
 .site-footer {
-  border-top: 1px solid var(--panel-border);
   padding: 1.5rem;
   text-align: center;
   color: var(--muted);
@@ -208,10 +220,19 @@ a:hover {
   gap: 1rem;
 }
 .feature {
+  display: block;
   background: var(--panel);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   padding: 1.25rem;
+  color: var(--text);
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+/* Feature cards are links to their section. */
+a.feature:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  border-color: var(--accent);
 }
 .feature h3 {
   margin: 0 0 0.5rem;
@@ -221,6 +242,13 @@ a:hover {
   margin: 0;
   color: var(--muted);
   font-size: 0.95rem;
+}
+.install-cta {
+  margin: 1.25rem 0;
+}
+.install-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.9rem;
 }
 .api-badge {
   text-align: center;

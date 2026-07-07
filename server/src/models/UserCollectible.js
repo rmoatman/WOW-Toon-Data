@@ -7,8 +7,8 @@ import mongoose from 'mongoose';
 const schema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
-    type: { type: String, enum: ['mount', 'pet'], required: true },
-    collectibleId: { type: Number, required: true }, // mount id, or pet instance id
+    type: { type: String, enum: ['mount', 'pet', 'toy'], required: true },
+    collectibleId: { type: Number, required: true }, // mount id, pet instance id, or toy id
     speciesId: { type: Number, default: null }, // pets only
     name: { type: String, default: '' },
     nickname: { type: String, default: '' }, // pets only

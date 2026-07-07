@@ -15,7 +15,8 @@ export default function Footer() {
       </nav>
       <p className="footer-legal">
         Powered by the Blizzard API. An unofficial, non-commercial portfolio project — not
-        affiliated with or endorsed by Blizzard Entertainment.
+        affiliated with or endorsed by Blizzard Entertainment. Background art generated with
+        ChatGPT.
       </p>
     </footer>
   );
