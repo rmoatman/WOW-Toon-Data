@@ -21,7 +21,17 @@ export function createApp() {
   // rate-limiter IP detection work correctly.
   if (isProd) app.set('trust proxy', 1);
 
-  app.use(helmet());
+  // This API is served on a different origin than the SPA and takes part in the
+  // Battle.net OAuth redirect. Helmet's default cross-origin isolation headers
+  // (Cross-Origin-Opener-Policy and Cross-Origin-Resource-Policy: same-origin)
+  // block that cross-origin flow in the browser (ERR_BLOCKED_BY_RESPONSE), so
+  // turn off COOP and allow resources to be used cross-origin.
+  app.use(
+    helmet({
+      crossOriginOpenerPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    })
+  );
   app.use(
     cors({
       origin: env.clientUrls,
