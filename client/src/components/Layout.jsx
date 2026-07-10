@@ -45,12 +45,15 @@ export default function Layout() {
   return (
     <div className="app-shell">
       <header className={`site-header${user ? '' : ' guest'}`}>
-        <Link to="/" className="brand">
-          {ownerPrefix(user)}
-          {beforeWow}
-          <span className="brand-wow">WoW</span>
-          {afterWow}
-        </Link>
+        <div className="brand-group">
+          <Link to="/" className="brand">
+            {ownerPrefix(user)}
+            {beforeWow}
+            <span className="brand-wow">WoW</span>
+            {afterWow}
+          </Link>
+          {user?.isDemo && <span className="demo-badge">Demo</span>}
+        </div>
         {user && (
           <button
             type="button"

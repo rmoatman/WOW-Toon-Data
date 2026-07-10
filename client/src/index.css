@@ -69,6 +69,22 @@ a:hover {
   z-index: 10;
 }
 
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.demo-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #14161f;
+  background: var(--accent);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 .brand {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   font-weight: 700;
@@ -995,9 +1011,9 @@ a.feature:hover {
 
   /* Logged-out (login/signup, etc.): center the brand on its own row, with the
      Log in/Sign up links centered below it. */
-  .site-header.guest .brand {
+  .site-header.guest .brand-group {
     width: 100%;
-    text-align: center;
+    justify-content: center;
   }
 
   /* Logged-out nav: wrap to a centered full-width row. */
