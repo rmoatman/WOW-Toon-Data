@@ -2,16 +2,19 @@
 
 Track the Achievements and Quests completed across all your World of Warcraft (Retail) characters, powered by the free Blizzard Battle.net API.
 
+**[▶ Live demo](https://wow-toon-data-api.onrender.com/)** — click **"Explore the demo"** for a one-click, read-only tour with no Blizzard account required. (Hosted on Render's free tier, so the first load may take ~30s to wake the service.)
+
 > Powered by the Blizzard API. World of Warcraft is a trademark of Blizzard Entertainment, Inc. This is an unofficial, non-commercial portfolio project and is not affiliated with or endorsed by Blizzard.
 
-## Features (planned)
+## Features
 
 - **Character menu + detail** — pick a character to see its render image, basic stats, achievements, and completed quests.
 - **Combined achievements** — sortable, searchable list of every achievement across all your toons; select one to see which characters have it.
 - **Combined quests** — same idea, for completed quests.
+- **Collections** — account-wide mounts, pets, and toys with lazy-loaded art.
 - **Accounts** — email/password login, forgot-password, delete account.
 - **Battle.net linking** — connect your Battle.net account to auto-import your character roster (US region).
-- **Demo mode** — a read-only seeded account so anyone can explore without a Blizzard account.
+- **Demo mode** — a read-only seeded account so anyone can explore without a Blizzard account (one-click "Explore the demo" login, with a "Demo" badge in the header).
 - **PWA** — installable, offline app shell.
 
 ## Tech stack
@@ -45,11 +48,11 @@ npm install                 # installs client + server via workspaces
 cp server/.env.example server/.env    # then fill in values
 cp client/.env.example client/.env
 
-npm run dev                 # runs API (default :5000) and client (:5173) together
+npm run dev                 # runs API (default :5000) and client (:5175) together
 ```
 
 - API health check: <http://localhost:5000/api/health>
-- Client: <http://localhost:5173>
+- Client: <http://localhost:5175>
 
 ## Environment variables
 
@@ -81,7 +84,7 @@ quests, and the account-wide collections; re-running replaces the demo data.
 - **Start:** `npm start --workspace server` (Express serves the SPA + API).
 - **Database:** MongoDB Atlas — set `MONGO_URI`, and allow Render's egress under Atlas Network Access (`0.0.0.0/0`).
 - **Key env vars:** `CLIENT_URL` = the service's own URL (used for the post-OAuth redirect); `BLIZZARD_REDIRECT_URI` = `<service-url>/api/blizzard/callback`, matched exactly in the Blizzard developer portal.
-- Locally, `npm run dev` still runs the client (Vite, `:5173`) and API (`:5000`) separately, with Vite proxying `/api` — so dev is same-origin too.
+- Locally, `npm run dev` still runs the client (Vite, `:5175`) and API (`:5000`) separately, with Vite proxying `/api` — so dev is same-origin too.
 
 ## Security
 
@@ -105,4 +108,4 @@ saga — are written up in [`docs/CHALLENGES.md`](docs/CHALLENGES.md).
 - [x] **M6 — Combined achievement & quest lists** (Deliverables #2 & #3: account-wide sortable/searchable lists + reverse lookup of which characters have each).
 - [x] **M7 — PWA** (manifest, service worker, install button).
 - [x] **Collections** — account-wide mounts, pets, and toys with lazy-loaded art.
-- [ ] **M8 — Demo/seeded account + polish.**
+- [x] **M8 — Demo/seeded account + polish** (read-only demo user, one-click "Explore the demo" login, "Demo" header badge, mutations disabled for the demo account).
