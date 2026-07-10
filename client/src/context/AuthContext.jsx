@@ -22,6 +22,12 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
+  const demoLogin = useCallback(async () => {
+    const data = await authApi.demo();
+    setUser(data.user);
+    return data.user;
+  }, []);
+
   const register = useCallback(async (payload) => {
     const data = await authApi.register(payload);
     setUser(data.user);
@@ -38,7 +44,7 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const value = { user, loading, login, register, logout, deleteAccount, setUser };
+  const value = { user, loading, login, demoLogin, register, logout, deleteAccount, setUser };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

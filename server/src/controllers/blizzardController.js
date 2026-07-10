@@ -31,6 +31,7 @@ function clientBase() {
 // Kicks off the OAuth flow: sign a state token binding the request to this user.
 export function authorize(req, res, next) {
   try {
+    if (req.user.isDemo) return res.status(403).json({ error: 'The demo account is read-only.' });
     if (!credentialsConfigured()) {
       throw badRequest('Blizzard API credentials are not configured on the server.');
     }
@@ -94,6 +95,7 @@ export async function callback(req, res) {
 // Re-import the roster using the stored user token (valid ~24h after linking).
 export async function resync(req, res, next) {
   try {
+    if (req.user.isDemo) return res.status(403).json({ error: 'The demo account is read-only.' });
     const user = await User.findById(req.user._id).select(
       '+blizzardAccessToken +blizzardTokenExpires'
     );
@@ -119,6 +121,7 @@ export async function resync(req, res, next) {
 // POST /api/blizzard/unlink  (requireAuth)
 export async function unlink(req, res, next) {
   try {
+    if (req.user.isDemo) return res.status(403).json({ error: 'The demo account is read-only.' });
     const user = await User.findById(req.user._id);
     user.battletag = null;
     user.blizzardUserId = null;

@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, demoLogin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || '/dashboard';
@@ -23,6 +23,18 @@ export default function Login() {
     } catch (err) {
       setError(err.message);
     } finally {
+      setBusy(false);
+    }
+  };
+
+  const tryDemo = async () => {
+    setError(null);
+    setBusy(true);
+    try {
+      await demoLogin();
+      navigate('/dashboard', { replace: true });
+    } catch (err) {
+      setError(err.message);
       setBusy(false);
     }
   };
@@ -56,6 +68,12 @@ export default function Login() {
           {busy ? 'Logging in…' : 'Log in'}
         </button>
       </form>
+
+      <div className="auth-divider"><span>or</span></div>
+      <button type="button" className="btn-secondary auth-demo-btn" onClick={tryDemo} disabled={busy}>
+        Explore the demo — no account needed
+      </button>
+
       <div className="auth-links">
         <Link to="/forgot-password">Forgot password?</Link>
         <span>

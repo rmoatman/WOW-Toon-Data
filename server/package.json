@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
-    "seed": "node src/scripts/seedDemo.js"
+    "seed": "node src/scripts/seedDemo.js",
+    "snapshot": "node src/scripts/snapshotDemo.js"
   },
   "dependencies": {
     "axios": "^1.18.1",

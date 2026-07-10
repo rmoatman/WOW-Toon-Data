@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { charactersApi } from '../api.js';
+import { useAuth } from '../context/AuthContext.jsx';
 import DataTable from '../components/DataTable.jsx';
 import { formatDate } from '../util/format.js';
 
@@ -19,6 +20,7 @@ const QUEST_COLUMNS = [{ key: 'name', label: 'Quest', sortable: true }];
 
 export default function CharacterDetail() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [character, setCharacter] = useState(null);
   const [achievements, setAchievements] = useState([]);
   const [quests, setQuests] = useState([]);
@@ -128,9 +130,11 @@ export default function CharacterDetail() {
           )}
         </div>
         <div className="hero-actions">
-          <button type="button" className="btn-secondary" onClick={sync} disabled={syncing}>
-            {syncing ? 'Syncing…' : 'Sync'}
-          </button>
+          {!user?.isDemo && (
+            <button type="button" className="btn-secondary" onClick={sync} disabled={syncing}>
+              {syncing ? 'Syncing…' : 'Sync'}
+            </button>
+          )}
           {c.lastDeepSyncedAt && (
             <span className="muted last-sync">Synced {formatDate(c.lastDeepSyncedAt)}</span>
           )}

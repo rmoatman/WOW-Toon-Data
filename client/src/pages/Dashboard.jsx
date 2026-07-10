@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { blizzardApi, charactersApi, syncApi } from '../api.js';
 import CharacterCard from '../components/CharacterCard.jsx';
@@ -13,7 +13,7 @@ const LINK_ERRORS = {
 };
 
 export default function Dashboard() {
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const [params, setParams] = useSearchParams();
 
   const [status, setStatus] = useState(null);
@@ -50,7 +50,7 @@ export default function Dashboard() {
   // Auto-sync stale characters once per visit (update-on-access), then refresh.
   useEffect(() => {
     if (loading || autoSyncedRef.current) return;
-    if (!status?.linked) return;
+    if (!status?.linked || user?.isDemo) return; // demo data is static/read-only
     autoSyncedRef.current = true;
     (async () => {
       setSyncing(true);
@@ -165,7 +165,7 @@ export default function Dashboard() {
               <p className="muted">Couldn't reach the server. Please refresh in a moment.</p>
             )}
 
-            {status?.configured && !linked && (
+            {status?.configured && !linked && !user?.isDemo && (
               <>
                 <h2>Connect Battle.net</h2>
                 <p className="muted">
@@ -184,14 +184,20 @@ export default function Dashboard() {
                   <span className="muted">Connected as</span>{' '}
                   <strong>{status.battletag || 'Battle.net'}</strong>
                 </div>
-                <div className="linked-actions">
-                  <button type="button" className="btn-secondary" onClick={syncNow} disabled={busy}>
-                    {busy ? 'Working…' : 'Sync now'}
-                  </button>
-                  <button type="button" className="btn-danger" onClick={unlink} disabled={busy}>
-                    Disconnect
-                  </button>
-                </div>
+                {user?.isDemo ? (
+                  <span className="muted">
+                    Read-only demo. <Link to="/register">Sign up</Link> to connect your own account.
+                  </span>
+                ) : (
+                  <div className="linked-actions">
+                    <button type="button" className="btn-secondary" onClick={syncNow} disabled={busy}>
+                      {busy ? 'Working…' : 'Sync now'}
+                    </button>
+                    <button type="button" className="btn-danger" onClick={unlink} disabled={busy}>
+                      Disconnect
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </section>

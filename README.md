@@ -55,6 +55,24 @@ npm run dev                 # runs API (default :5000) and client (:5173) togeth
 
 See `server/.env.example` and `client/.env.example` for the full list. The Blizzard client ID/secret come from <https://develop.battle.net>.
 
+## Demo account
+
+Visitors can explore a fully-populated, **read-only** demo without a Blizzard
+account — there's an **"Explore the demo"** button on the home/login pages
+(one-click login), and mutations (connect / sync / disconnect / delete) are
+disabled for the demo user.
+
+```bash
+# create the read-only demo user
+npm run seed --workspace server
+
+# populate it by snapshotting a real account's synced data into the demo
+SNAPSHOT_SOURCE_EMAIL=you@example.com npm run snapshot --workspace server
+```
+
+The snapshot copies characters (skipping hidden ones), their achievements and
+quests, and the account-wide collections; re-running replaces the demo data.
+
 ## Deployment (Render)
 
 `render.yaml` defines a **single Web Service**: the build compiles the React client (`npm run build --workspace client`) and the Express API serves the resulting `client/dist` alongside `/api/*`. Because the app and API share one origin, the auth cookie is **first-party** (`SameSite=Lax`), so login works in every browser — including Safari/iOS, which block the third-party cookies a split client/API deployment would require.

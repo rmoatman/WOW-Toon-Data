@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getHealth } from '../api.js';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -16,12 +16,24 @@ const FEATURES = [
 ];
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, demoLogin } = useAuth();
+  const navigate = useNavigate();
   const [health, setHealth] = useState(null);
+  const [demoBusy, setDemoBusy] = useState(false);
 
   useEffect(() => {
     getHealth().then(setHealth).catch(() => setHealth({ status: 'unreachable' }));
   }, []);
+
+  const tryDemo = async () => {
+    setDemoBusy(true);
+    try {
+      await demoLogin();
+      navigate('/dashboard');
+    } catch {
+      setDemoBusy(false);
+    }
+  };
 
   return (
     <div className="page home">
@@ -44,6 +56,9 @@ export default function Home() {
               <Link to="/register" className="btn-primary">
                 Get started
               </Link>
+              <button type="button" className="btn-secondary" onClick={tryDemo} disabled={demoBusy}>
+                {demoBusy ? 'Loading…' : 'Explore the demo'}
+              </button>
               <Link to="/login" className="btn-secondary">
                 Log in
               </Link>

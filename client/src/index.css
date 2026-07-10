@@ -319,6 +319,23 @@ a.feature:hover {
   font-size: 0.9rem;
   color: var(--muted);
 }
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 1.25rem 0 1rem;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--panel-border);
+}
+.auth-demo-btn {
+  width: 100%;
+}
 
 /* ---- Buttons ---- */
 .btn-primary,

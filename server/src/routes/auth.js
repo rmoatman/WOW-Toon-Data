@@ -4,6 +4,7 @@ import { requireAuth } from '../middleware/requireAuth.js';
 import {
   register,
   login,
+  demoLogin,
   logout,
   me,
   forgotPassword,
@@ -15,6 +16,7 @@ const router = Router();
 
 router.post('/register', authLimiter, register);
 router.post('/login', authLimiter, login);
+router.post('/demo', authLimiter, demoLogin);
 router.post('/logout', logout);
 router.get('/me', requireAuth, me);
 router.post('/forgot-password', authLimiter, forgotPassword);

@@ -71,6 +71,19 @@ export async function login(req, res, next) {
   }
 }
 
+// POST /api/auth/demo — one-click login to the read-only demo account.
+export async function demoLogin(req, res, next) {
+  try {
+    const email = (process.env.DEMO_EMAIL || 'demo@wow-toon-data.app').toLowerCase();
+    const user = await User.findOne({ email, isDemo: true });
+    if (!user) throw badRequest('The demo account is not available.');
+    issueSession(res, user);
+    res.json({ user: user.toPublicJSON() });
+  } catch (err) {
+    next(err);
+  }
+}
+
 // POST /api/auth/logout
 export async function logout(req, res) {
   res.clearCookie(AUTH_COOKIE, clearCookieOptions());
